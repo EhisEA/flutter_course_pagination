@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
 
   getData() async {
     //indicat that it getting data
+    await Future.delayed(Duration(seconds: 1));
     setState(() {
       isLoading = true;
     });
@@ -79,16 +80,20 @@ class _HomeViewState extends State<HomeView> {
                   child: Text("No Data"),
                 )
               : ListView.builder(
-                  controller: _scrollController,
-                  itemCount: isLoading ? items.length + 1 : items.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: (items.length == index)
-                        ? const Center(child: CircularProgressIndicator())
-                        : Text(
-                            "$index ${items[index].name}",
-                          ),
-                  ),
-                ),
+                  // controller: _scrollController,
+                  itemCount: items.length + 1,
+                  itemBuilder: (context, index) {
+                    if ((items.length == index)) {
+                      getData();
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    return ListTile(
+                      title: Text(
+                        "$index ${items[index].name}",
+                      ),
+                    );
+                  }),
     );
   }
 }
